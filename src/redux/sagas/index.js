@@ -1,12 +1,10 @@
-import { watchGetProducts, watchPostProduct, watchPutProduct, watchDeleteProduct, watchEditProduct } from './products'
+import { watchGetProducts, watchPostProduct, watchDeleteProduct } from './products';
 
 export default function* () {
   yield [
     watchGetProducts(),
     watchPostProduct(),
-    watchPutProduct(),
-    watchDeleteProduct(),
-    watchEditProduct()
+    watchDeleteProduct()
   ]
   console.log('root saga')
 }
