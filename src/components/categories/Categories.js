@@ -1,18 +1,16 @@
 import React from 'react'
 import Container from '@material-ui/core/Container'
-import TextField from '@material-ui/core/TextField'
 import TableContainer from '@material-ui/core/TableContainer'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TableBody from '@material-ui/core/TableBody'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
-import Button from '@material-ui/core/Button'
-import EditIcon from '@material-ui/icons/Edit'
-import DeleteIcon from '@material-ui/icons/Delete'
 import { connect } from 'react-redux'
-import { GET_CATEGORIES, POST_CATEGORIES, DELETE_CATEGORIES } from '../../redux/actions'
+import { GET_CATEGORIES, POST_CATEGORIES, DELETE_CATEGORIES, EDIT_CATEGORY, CANCEL_CATEGORY_UPDATE, PUT_CATEGORY } from '../../redux/actions'
+import CategoryList from './CategoryList'
+import CategoryForm from './CategoryForm'
+import SearchBox from '../search-box/SearchBox'
 
 class Categories extends React.Component {
   constructor(props) {
@@ -22,7 +20,9 @@ class Categories extends React.Component {
       categoryForm: {
         name: '',
         status: ''
-      }
+      },
+      searchField: '',
+      updatedCategory: ''
     }
   }
 
@@ -69,73 +69,63 @@ class Categories extends React.Component {
     this.props.deleteCategory(category.id)
   }
 
+  handleCategoryEdit = category => {
+    this.props.editCategory(category.id)
+    console.log('edit', category)
+  }
+
+  handleSearch = e => {
+    this.setState({ searchField: e.target.value })
+  }
+
+  updateCategory = category => {
+    this.props.updateCategory(category)
+  }
+
+  cancelUpdate = category => {
+    this.props.cancelUpdate(category.id)
+  }
+
   render() {
-    console.log('@categories', this.props)
+    const { categoryForm, searchField } = this.state
+    const { categories } = this.props
+
+    const searchedCategory = categories.filter(({ name }) =>
+      name.includes(searchField)
+    )
+    console.log('categories', this.props)
     return (
       <Container>
-        <div>
-          <TextField type='search' label='Search Category' />
-        </div>
+        <SearchBox
+          handleSearch={this.handleSearch}
+        />
         <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Category Name</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                  this.props.categories.map(category => (
-                    <TableRow>
-                      <TableCell>{category.name}</TableCell>
-                      <TableCell>{category.status}</TableCell>
-                      <TableCell>
-                        <ButtonGroup>
-                          <Button
-                            color='default'
-                            startIcon={<EditIcon />}
-                          >Edit</Button>
-                          <Button
-                            color='secondary'
-                            startIcon={<DeleteIcon />}
-                            onClick={() => this.handleCategoryDelete(category)}
-                          >
-                            Delete
-                          </Button>
-                        </ButtonGroup>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                }
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <hr />
-          <div>
-            <h2>New Category</h2>
-            <TextField
-              id='name'
-              label='Category Name'
-              value={this.state.categoryForm.name}
-              onChange={this.handleInputChange}
-              style={{ margin: 8 }}
-            />
-            <br />
-            <TextField
-              id='status'
-              label='Status'
-              value={this.state.categoryForm.status}
-              onChange={this.handleInputChange}
-              style={{ margin: 8 }}
-            />
-            <div>
-              <Button color='primary' variant='contained' onClick={this.handleCategorySave} style={{ margin: 10 }}>
-                Add
-              </Button>
-            </div>
-          </div>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Category Name</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+              <CategoryList
+                categories={searchedCategory}
+                handleCategoryDelete={this.handleCategoryDelete}
+                handleCategoryEdit={this.handleCategoryEdit}
+                updateCategory={this.updateCategory}
+                cancelUpdate={this.cancelUpdate}
+                handleInputChange={this.handleInputChange}
+                updatedCategory={this.state.updatedCategory}
+                handleCategorySave={this.handleCategorySave}
+              />
+          </Table>
+        </TableContainer>
+        <hr />
+        <CategoryForm
+          handleInputChange={this.handleInputChange}
+          categoryForm={categoryForm}
+          handleCategorySave={this.handleCategorySave}
+        />
       </Container>
     )
   }
@@ -157,6 +147,16 @@ const mapDispatchToProps = dispatch => {
     },
     deleteCategory: (id) => {
       dispatch({ type: DELETE_CATEGORIES, value: id})
+    },
+    editCategory: (id) => {
+      dispatch({ type: EDIT_CATEGORY, value: id })
+    },
+    updateCategory: (category) => {
+      console.log('dispatch an update', category)
+      dispatch({ type: PUT_CATEGORY, value: category})
+    },
+    cancelUpdate: (id) => {
+      dispatch({ type: CANCEL_CATEGORY_UPDATE, value: id })
     }
   }
 }

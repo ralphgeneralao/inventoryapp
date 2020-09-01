@@ -83,7 +83,6 @@ class Products extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { productForm } = this.state
     const { name, price, stock, status } = productForm
     const { products } = this.props
@@ -174,6 +173,7 @@ class Products extends React.Component {
               id='price'
               label='Price'
               value={price}
+              type='number'
               onChange={this.handleInputChange}
               style={{ margin: 8 }}
             />
@@ -182,6 +182,7 @@ class Products extends React.Component {
               id='stock'
               label='Stock'
               value={stock}
+              type='number'
               onChange={this.handleInputChange}
               style={{ margin: 8 }}
             />
