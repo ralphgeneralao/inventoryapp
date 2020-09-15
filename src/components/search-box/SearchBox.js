@@ -1,11 +1,11 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
 
-const SearchBox = (props) => (
+const SearchBox = ({ placeholder, handleSearch }) => (
   <TextField
     type='search'
-    label='Search Category'
-    onChange={props.handleSearch}
+    placeholder={placeholder}
+    onChange={handleSearch}
   />
 )
 

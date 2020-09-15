@@ -5,7 +5,6 @@ import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-import TableBody from '@material-ui/core/TableBody'
 import { connect } from 'react-redux'
 import { GET_CATEGORIES, POST_CATEGORIES, DELETE_CATEGORIES, EDIT_CATEGORY, CANCEL_CATEGORY_UPDATE, PUT_CATEGORY } from '../../redux/actions'
 import CategoryList from './CategoryList'
@@ -22,7 +21,10 @@ class Categories extends React.Component {
         status: ''
       },
       searchField: '',
-      updatedCategory: ''
+      newCategory: {
+        newCatName: '',
+        newCatStatus: ''
+      }
     }
   }
 
@@ -65,6 +67,10 @@ class Categories extends React.Component {
     })
   }
 
+  updateCategory = category => {
+    this.props.updateCategory(category)
+  }
+
   handleCategoryDelete = category => {
     this.props.deleteCategory(category.id)
   }
@@ -78,27 +84,25 @@ class Categories extends React.Component {
     this.setState({ searchField: e.target.value })
   }
 
-  updateCategory = category => {
-    this.props.updateCategory(category)
-  }
-
   cancelUpdate = category => {
     this.props.cancelUpdate(category.id)
   }
 
   render() {
-    const { categoryForm, searchField } = this.state
+    const { categoryForm, searchField, newCategory } = this.state
     const { categories } = this.props
 
     const searchedCategory = categories.filter(({ name }) =>
       name.includes(searchField)
     )
-    console.log('categories', this.props)
     return (
       <Container>
-        <SearchBox
-          handleSearch={this.handleSearch}
-        />
+        <div style={{ marginTop: '20px' }}>
+          <SearchBox
+            placeholder='Search Category'
+            handleSearch={this.handleSearch}
+          />
+        </div>
         <TableContainer>
           <Table>
             <TableHead>
@@ -115,8 +119,8 @@ class Categories extends React.Component {
                 updateCategory={this.updateCategory}
                 cancelUpdate={this.cancelUpdate}
                 handleInputChange={this.handleInputChange}
-                updatedCategory={this.state.updatedCategory}
                 handleCategorySave={this.handleCategorySave}
+                newCategory={newCategory}
               />
           </Table>
         </TableContainer>

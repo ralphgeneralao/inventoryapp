@@ -1,5 +1,5 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
-import { GET_ORDERS, SET_ORDERS, POST_ORDER } from '../actions'
+import { GET_ORDERS, SET_ORDERS, POST_ORDER, DELETE_ORDER } from '../actions'
 import Axios from 'axios'
 
 export const watchGetOrders = function* () {
@@ -8,6 +8,10 @@ export const watchGetOrders = function* () {
 
 export const watchPostOrder = function* () {
   yield takeEvery(POST_ORDER, workerPostOrder)
+}
+
+export const watchDeleteOrder = function* () {
+  yield takeEvery(DELETE_ORDER, workerDeleteOrder)
 }
 
 function* workerGetOrders() {
@@ -32,5 +36,18 @@ function* workerPostOrder(action) {
   }
   catch (error) {
     console.log('Failed', error)
+  }
+}
+
+function* workerDeleteOrder(action) {
+  console.log('Deleting order')
+  try {
+    const url = `http://localhost:3000/orders/${action.value}`
+    const result = yield call(Axios.delete, url)
+    yield put({ type: GET_ORDERS })
+    console.log('Deleted successfully')
+  }
+  catch (error) {
+    console.log('Failed deleting', error)
   }
 }

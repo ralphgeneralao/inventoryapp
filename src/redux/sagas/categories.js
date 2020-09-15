@@ -10,12 +10,12 @@ export const watchPostCategories = function* () {
   yield takeEvery(POST_CATEGORIES, workerPostCategories)
 }
 
-export const watchDeleteCategories = function* () {
-  yield takeEvery(DELETE_CATEGORIES, workerDeleteCategories)
-}
-
 export const watchPutCategories = function* () {
   yield takeEvery(PUT_CATEGORY, workerPutCategories)
+}
+
+export const watchDeleteCategories = function* () {
+  yield takeEvery(DELETE_CATEGORIES, workerDeleteCategories)
 }
 
 export const watchEditCategory = function* () {
@@ -55,7 +55,7 @@ function* workerPutCategories(action) {
     const url = `http://localhost:3000/categories/${action.value.id}`
     const result = yield call(Axios.put, url, action.value)
     yield put({ type: GET_CATEGORIES })
-    console.log('Updated Category successfully')
+    console.log('Updated Category successfully', result)
   }
   catch {
     console.log('Failed updating')

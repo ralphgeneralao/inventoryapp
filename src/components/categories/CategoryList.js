@@ -1,12 +1,14 @@
 import React from 'react'
 import Category from './Category'
 import TableBody from '@material-ui/core/TableBody'
+import { TableCell } from '@material-ui/core'
 
 const CategoryList = (props) => {
 
   return (
     <TableBody>
       {
+        props.categories.length > 0 ?
         props.categories.map(category => (
           <Category
             category={category}
@@ -15,10 +17,11 @@ const CategoryList = (props) => {
             cancelUpdate={props.cancelUpdate}
             updateCategory={props.updateCategory}
             handleInputChange={props.handleInputChange}
-            updatedCategory={props.updatedCategory}
             handleCategorySave={props.handleCategorySave}
+            newCategory={props.newCategory}
           />
-        ))
+        )) :
+        <TableCell>No Category found.</TableCell>
       }
     </TableBody>
   )

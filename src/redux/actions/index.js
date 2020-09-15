@@ -8,8 +8,8 @@ export const SET_EDIT_MODE = 'setEditMode';
 export const GET_CATEGORIES = 'getCategories';
 export const SET_CATEGORIES = 'setCategories';
 export const POST_CATEGORIES = 'postCategories';
-export const DELETE_CATEGORIES = 'deleteCategories';
 export const PUT_CATEGORY = 'putCategory';
+export const DELETE_CATEGORIES = 'deleteCategories';
 export const EDIT_CATEGORY = 'editCategory'
 export const CANCEL_CATEGORY_UPDATE = 'cancelCategoryUpdate'
 

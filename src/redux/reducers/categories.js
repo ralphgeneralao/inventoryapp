@@ -5,6 +5,7 @@ const categories = (state = [], action) => {
     case SET_CATEGORIES:
       return [...action.value]
     case SET_EDIT_MODE: {
+      console.log(action.value)
       const categories = (state || []).map(x => {
         if(x.id === action.value.id) {
           x.editMode = action.value.editMode
